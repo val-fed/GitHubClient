@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitHubClient</string>
+    <string name="error_message">Something went wrong</string>
 </resources>
