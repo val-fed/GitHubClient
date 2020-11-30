@@ -20,6 +20,15 @@ import java.util.List;
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.RepositoryViewHolder> {
 
   private final List<Repository> repositories = new ArrayList<>();
+  private final OnRepoClickListener onRepoClickListener;
+
+  public RepositoryAdapter(OnRepoClickListener onRepoClickListener) {
+    this.onRepoClickListener = onRepoClickListener;
+  }
+
+  public interface OnRepoClickListener {
+    void onRepoClick(Repository repository);
+  }
 
   @NonNull
   @Override
@@ -62,6 +71,14 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
       nameTextView = itemView.findViewById(R.id.name_text_view);
       descriptionTextView = itemView.findViewById(R.id.description_text_view);
       ownerImageView = itemView.findViewById(R.id.owner_image_view);
+
+      itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Repository repository = repositories.get(getLayoutPosition());
+          onRepoClickListener.onRepoClick(repository);
+        }
+      });
     }
 
     void bind(Repository repository) {
