@@ -7,4 +7,5 @@
     <string name="updated_hint">Обновлен:</string>
     <string name="created_hint">Создан:</string>
     <string name="language_hint">Язык:</string>
+    <string name="settings">Настройки</string>
 </resources>
