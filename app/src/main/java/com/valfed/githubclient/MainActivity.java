@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
   private HttpClient httpClient;
   private RepositoryAdapter repositoryAdapter;
   private EditText queryEditText;
+  private ProgressBar progressBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     repositoryAdapter = new RepositoryAdapter();
     recyclerView.setAdapter(repositoryAdapter);
     queryEditText = findViewById(R.id.query_edit_text);
+    progressBar = findViewById(R.id.progress_bar);
 
     httpClient = new HttpClient();
   }
@@ -63,7 +66,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPreExecute() {
+      progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected void onPostExecute(List<Repository> result) {
+      progressBar.setVisibility(View.GONE);
       if (result != null) {
         repositoryAdapter.addItems(result);
       } else {
