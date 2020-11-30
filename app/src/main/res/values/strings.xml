@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHubClient</string>
+    <string name="app_name" translatable="false">GitHubClient</string>
     <string name="error_message">Something went wrong</string>
     <string name="query_hint">Search</string>
     <string name="search">Search</string>

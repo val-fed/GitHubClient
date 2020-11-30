@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_message">Что-то пошло не так</string>
+    <string name="query_hint">Поиск</string>
+    <string name="search">Поиск</string>
+    <string name="empty_text">Поисковый запрос не может быть пустым</string>
+    <string name="updated_hint">Обновлен:</string>
+    <string name="created_hint">Создан:</string>
+    <string name="language_hint">Язык:</string>
+</resources>
