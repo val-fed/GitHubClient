@@ -69,7 +69,10 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
       descriptionTextView.setText(repository.getDescription());
 
       String avatarUrl = repository.getOwner().getAvatarUrl();
-      Picasso.get().load(avatarUrl).into(ownerImageView);
+      Picasso.get()
+          .load(avatarUrl)
+          .placeholder(R.drawable.ic_person_24)
+          .into(ownerImageView);
     }
   }
 }
