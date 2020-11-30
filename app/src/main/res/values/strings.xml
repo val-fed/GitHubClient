@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GitHubClient</string>
     <string name="error_message">Something went wrong</string>
+    <string name="query_hint">Search</string>
+    <string name="search">Search</string>
+    <string name="empty_text">Search query can not be empty</string>
 </resources>

@@ -2,6 +2,8 @@ package com.valfed.githubclient;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
   private HttpClient httpClient;
   private RepositoryAdapter repositoryAdapter;
+  private EditText queryEditText;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +35,19 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     repositoryAdapter = new RepositoryAdapter();
     recyclerView.setAdapter(repositoryAdapter);
+    queryEditText = findViewById(R.id.query_edit_text);
 
     httpClient = new HttpClient();
-    new GetRepositoriesTask().execute("android");
+  }
+
+  public void searchRepositories(View view) {
+    String query = queryEditText.getText().toString();
+    if (query.isEmpty()) {
+      Toast.makeText(this, R.string.empty_text, Toast.LENGTH_SHORT).show();
+    } else {
+      repositoryAdapter.clearItems();
+      new GetRepositoriesTask().execute(query);
+    }
   }
 
   private class GetRepositoriesTask extends AsyncTask<String, Void, List<Repository>> {

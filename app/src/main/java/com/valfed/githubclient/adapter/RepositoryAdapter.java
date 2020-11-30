@@ -46,6 +46,11 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Re
     notifyDataSetChanged();
   }
 
+  public void clearItems() {
+    repositories.clear();
+    notifyDataSetChanged();
+  }
+
   class RepositoryViewHolder extends RecyclerView.ViewHolder {
     private final TextView nameTextView;
     private final TextView descriptionTextView;
