@@ -1,10 +1,13 @@
 package com.valfed.githubclient.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Objects;
 
 public class Owner {
   private final String login;
   private final int id;
+  @SerializedName("avatar_url")
   private final String avatarUrl;
 
   public Owner(String login, int id, String avatarUrl) {

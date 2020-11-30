@@ -1,15 +1,21 @@
 package com.valfed.githubclient.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Objects;
 
 public class Repository {
   private final int id;
   private final String name;
   private final String description;
+  @SerializedName("created_at")
   private final String createdAt;
+  @SerializedName("updated_at")
   private final String updatedAt;
+  @SerializedName("stargazers_count")
   private final int stargazersCount;
   private final String language;
+  @SerializedName("forks_count")
   private final int forksCount;
   private final Owner owner;
 

@@ -13,8 +13,6 @@ import com.valfed.githubclient.R;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.network.HttpClient;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +68,7 @@ public class RepoDetailsActivity extends AppCompatActivity {
       String userLogin = strings[1];
       try {
         return httpClient.getRepository(repoName, userLogin);
-      } catch (IOException | JSONException e) {
+      } catch (IOException e) {
         e.printStackTrace();
         return null;
       }

@@ -17,8 +17,6 @@ import com.valfed.githubclient.adapter.RepositoryAdapter;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.network.HttpClient;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     protected List<Repository> doInBackground(String... strings) {
       try {
         return httpClient.getRepositories(strings[0]);
-      } catch (IOException | JSONException e) {
+      } catch (IOException e) {
         e.printStackTrace();
         return null;
       }
