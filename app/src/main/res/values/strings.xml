@@ -4,4 +4,7 @@
     <string name="query_hint">Search</string>
     <string name="search">Search</string>
     <string name="empty_text">Search query can not be empty</string>
+    <string name="updated_hint">Updated:</string>
+    <string name="created_hint">Created:</string>
+    <string name="language_hint">Language:</string>
 </resources>
