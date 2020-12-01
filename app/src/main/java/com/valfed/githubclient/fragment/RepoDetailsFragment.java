@@ -42,6 +42,15 @@ public class RepoDetailsFragment extends Fragment {
   private TextView languageTextView;
 
 
+  public static RepoDetailsFragment newInstance(String repoName, String userLogin) {
+    Bundle args = new Bundle();
+    RepoDetailsFragment repoDetailsFragment = new RepoDetailsFragment();
+    args.putString(EXTRA_REPO_NAME, repoName);
+    args.putString(EXTRA_USER_LOGIN, userLogin);
+    repoDetailsFragment.setArguments(args);
+    return repoDetailsFragment;
+  }
+
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,6 +62,12 @@ public class RepoDetailsFragment extends Fragment {
     initView(view);
 
     httpClient = new HttpClient();
+    Bundle args = getArguments();
+    if (args != null) {
+      String repoName = args.getString(EXTRA_REPO_NAME);
+      String userLogin = args.getString(EXTRA_USER_LOGIN);
+      updateContent(repoName, userLogin);
+    }
     return view;
   }
 

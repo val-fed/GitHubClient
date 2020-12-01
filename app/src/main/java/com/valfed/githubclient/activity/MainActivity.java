@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.valfed.githubclient.R;
+import com.valfed.githubclient.fragment.RepoDetailsFragment;
 import com.valfed.githubclient.fragment.RepoListFragment;
 
 
@@ -78,6 +79,29 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void navigateToDetailsScreen(String name, String login) {
+    boolean isDualPaneMode = findViewById(R.id.details_fragment_container) != null;
+    if (isDualPaneMode) {
+      showDetailsFragment(name, login);
+    } else {
+      startDetailsActivity(name, login);
+    }
+  }
+
+  private void showDetailsFragment(String name, String login) {
+    Fragment fragment = getSupportFragmentManager()
+        .findFragmentById(R.id.details_fragment_container);
+    if (fragment != null) {
+      RepoDetailsFragment repoDetailsFragment = (RepoDetailsFragment) fragment;
+      repoDetailsFragment.updateContent(name, login);
+    } else {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .add(R.id.details_fragment_container, RepoDetailsFragment.newInstance(name, login))
+          .commit();
+    }
+  }
+
+  private void startDetailsActivity(String name, String login) {
     Intent intent = new Intent(this, RepoDetailsActivity.class);
     intent.putExtra(RepoDetailsActivity.EXTRA_REPO_NAME, name);
     intent.putExtra(RepoDetailsActivity.EXTRA_USER_LOGIN, login);
