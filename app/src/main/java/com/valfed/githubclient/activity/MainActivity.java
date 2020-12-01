@@ -1,5 +1,6 @@
 package com.valfed.githubclient.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -74,5 +75,12 @@ public class MainActivity extends AppCompatActivity {
       default:
         return super.onOptionsItemSelected(item);
     }
+  }
+
+  public void navigateToDetailsScreen(String name, String login) {
+    Intent intent = new Intent(this, RepoDetailsActivity.class);
+    intent.putExtra(RepoDetailsActivity.EXTRA_REPO_NAME, name);
+    intent.putExtra(RepoDetailsActivity.EXTRA_USER_LOGIN, login);
+    startActivity(intent);
   }
 }

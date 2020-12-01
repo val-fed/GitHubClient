@@ -1,5 +1,6 @@
 package com.valfed.githubclient.fragment;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.valfed.githubclient.R;
+import com.valfed.githubclient.activity.MainActivity;
 import com.valfed.githubclient.adapter.RepositoryAdapter;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.network.HttpClient;
@@ -27,17 +30,17 @@ public class RepoListFragment extends Fragment {
   private HttpClient httpClient;
   private RepositoryAdapter repositoryAdapter;
   private ProgressBar progressBar;
+  private MainActivity mainActivity;
 
-  public RepoListFragment() {
-    // Required empty public constructor
+  @Override
+  public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
+    if (context instanceof MainActivity) {
+      mainActivity = (MainActivity) context;
+    } else {
+      throw new RuntimeException("Can not cast context to MainActivity");
+    }
   }
-
-
-  public static RepoListFragment newInstance() {
-    RepoListFragment fragment = new RepoListFragment();
-    return fragment;
-  }
-
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +61,7 @@ public class RepoListFragment extends Fragment {
     RepositoryAdapter.OnRepoClickListener listener = new RepositoryAdapter.OnRepoClickListener() {
       @Override
       public void onRepoClick(Repository repository) {
-        // TODO: Implement
+        mainActivity.navigateToDetailsScreen(repository.getName(), repository.getOwner().getLogin());
       }
     };
     repositoryAdapter = new RepositoryAdapter(listener);
