@@ -1,7 +1,6 @@
 package com.valfed.githubclient.fragment;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +20,8 @@ import com.valfed.githubclient.activity.MainActivity;
 import com.valfed.githubclient.adapter.RepositoryAdapter;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.repository.DataRepository;
+import com.valfed.githubclient.viewmodel.RepoListViewModel;
 
-import java.io.IOException;
-import java.util.List;
 
 public class RepoListFragment extends Fragment {
 
@@ -32,6 +31,7 @@ public class RepoListFragment extends Fragment {
   private RepositoryAdapter repositoryAdapter;
   private ProgressBar progressBar;
   private MainActivity mainActivity;
+  private RepoListViewModel viewModel;
 
   @Override
   public void onAttach(@NonNull Context context) {
@@ -49,10 +49,39 @@ public class RepoListFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_repo_list, container, false);
 
     initRecyclerView(view);
+    initViewModel();
 
     progressBar = view.findViewById(R.id.progress_bar);
     dataRepository = App.getDataRepository();
     return view;
+  }
+
+  private void initViewModel() {
+    viewModel = ViewModelProviders.of(this).get(RepoListViewModel.class);
+
+    viewModel.getRepositories().observe(this, (repositories -> {
+      if (repositories != null) {
+        repositoryAdapter.addItems(repositories);
+      }
+    }));
+
+    viewModel.isLoading().observe(this, (isLoading) -> {
+      if (isLoading != null) {
+        progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+      }
+    });
+
+    viewModel.isNetworkException().observe(this, (isException) -> {
+      if (isException != null && isException) {
+        Toast.makeText(getActivity(), R.string.error_message, Toast.LENGTH_SHORT).show();
+      }
+    });
+
+    viewModel.isQueryValidationException().observe(this, (isQueryValidationException) -> {
+      if (isQueryValidationException != null && isQueryValidationException) {
+        Toast.makeText(getActivity(), R.string.empty_text, Toast.LENGTH_SHORT).show();
+      }
+    });
   }
 
   private void initRecyclerView(View view) {
@@ -70,41 +99,6 @@ public class RepoListFragment extends Fragment {
   }
 
   public void onSearchQueryChanged(String query) {
-    if (query.isEmpty()) {
-      Toast.makeText(getActivity(), R.string.empty_text, Toast.LENGTH_SHORT).show();
-    } else {
-      repositoryAdapter.clearItems();
-      new GetRepositoriesAsyncTask().execute(query);
-    }
-  }
-
-  private class GetRepositoriesAsyncTask extends AsyncTask<String, Void, List<Repository>> {
-
-    @Override
-    protected void onPreExecute() {
-      progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected List<Repository> doInBackground(String... queries) {
-
-      try {
-        return dataRepository.getRepositories(queries[0]);
-      } catch (IOException e) {
-        e.printStackTrace();
-        return null;
-      }
-    }
-
-    @Override
-    protected void onPostExecute(List<Repository> result) {
-      progressBar.setVisibility(View.GONE);
-
-      if (result != null) {
-        repositoryAdapter.addItems(result);
-      } else {
-        Toast.makeText(getActivity(), R.string.error_message, Toast.LENGTH_SHORT).show();
-      }
-    }
+    viewModel.searchRepositories(query);
   }
 }

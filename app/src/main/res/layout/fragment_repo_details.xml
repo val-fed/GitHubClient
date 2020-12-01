@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/owner_image_view"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
@@ -23,12 +23,12 @@
         android:textAppearance="@style/TextPrimary.Bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/description_text_view"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@+id/owner_image_view"
         app:layout_constraintTop_toTopOf="@+id/owner_image_view"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Kotlin" />
+        tools:text="Android" />
 
     <TextView
         android:id="@+id/description_text_view"
@@ -40,11 +40,11 @@
         android:textAppearance="@style/TextSecondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/stars_image_view"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/name_text_view"
         app:layout_constraintTop_toBottomOf="@+id/name_text_view"
-        tools:text="Лучший язык" />
+        tools:text="Description" />
 
     <ImageView
         android:id="@+id/stars_image_view"
@@ -52,7 +52,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_star_24"
         app:layout_constraintBottom_toBottomOf="@+id/owner_image_view"
-        app:layout_constraintStart_toStartOf="@+id/name_text_view" />
+        app:layout_constraintStart_toStartOf="@+id/name_text_view"
+        app:layout_constraintTop_toTopOf="@id/stars_image_view" />
 
     <TextView
         android:id="@+id/stars_text_view"
@@ -90,7 +91,7 @@
         android:id="@+id/language_hint_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/language_hint"
         android:textAppearance="@style/TextSecondary"
         app:layout_constraintStart_toStartOf="@+id/owner_image_view"
@@ -153,6 +154,30 @@
         app:layout_constraintBottom_toBottomOf="@+id/updated_hint_text_view"
         app:layout_constraintStart_toStartOf="@+id/language_text_view"
         app:layout_constraintTop_toTopOf="@+id/updated_hint_text_view"
-        tools:text="14.02.2018" />
+        tools:text="01.12.2020" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
