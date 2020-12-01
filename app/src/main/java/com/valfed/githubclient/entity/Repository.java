@@ -1,22 +1,35 @@
 package com.valfed.githubclient.entity;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
+@Entity
 public class Repository {
+  @PrimaryKey
   private final int id;
+
   private final String name;
   private final String description;
+
   @SerializedName("created_at")
   private final String createdAt;
+
   @SerializedName("updated_at")
   private final String updatedAt;
+
   @SerializedName("stargazers_count")
   private final int stargazersCount;
   private final String language;
+
   @SerializedName("forks_count")
   private final int forksCount;
+
+  @Embedded(prefix = "owner_")
   private final Owner owner;
 
   public Repository(int id,

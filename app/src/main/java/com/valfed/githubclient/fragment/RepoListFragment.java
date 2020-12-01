@@ -14,11 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.valfed.githubclient.App;
 import com.valfed.githubclient.R;
 import com.valfed.githubclient.activity.MainActivity;
 import com.valfed.githubclient.adapter.RepositoryAdapter;
 import com.valfed.githubclient.entity.Repository;
-import com.valfed.githubclient.network.HttpClient;
+import com.valfed.githubclient.repository.DataRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +28,7 @@ public class RepoListFragment extends Fragment {
 
   public static final String TAG = "RepoListFragment";
 
-  private HttpClient httpClient;
+  private DataRepository dataRepository;
   private RepositoryAdapter repositoryAdapter;
   private ProgressBar progressBar;
   private MainActivity mainActivity;
@@ -50,7 +51,7 @@ public class RepoListFragment extends Fragment {
     initRecyclerView(view);
 
     progressBar = view.findViewById(R.id.progress_bar);
-    httpClient = new HttpClient();
+    dataRepository = App.getDataRepository();
     return view;
   }
 
@@ -88,7 +89,7 @@ public class RepoListFragment extends Fragment {
     protected List<Repository> doInBackground(String... queries) {
 
       try {
-        return httpClient.getRepositories(queries[0]);
+        return dataRepository.getRepositories(queries[0]);
       } catch (IOException e) {
         e.printStackTrace();
         return null;

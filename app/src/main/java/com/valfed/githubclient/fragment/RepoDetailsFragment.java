@@ -14,9 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
+import com.valfed.githubclient.App;
 import com.valfed.githubclient.R;
 import com.valfed.githubclient.entity.Repository;
-import com.valfed.githubclient.network.HttpClient;
+import com.valfed.githubclient.repository.DataRepository;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,7 +31,7 @@ public class RepoDetailsFragment extends Fragment {
   public static final String EXTRA_USER_LOGIN = "userLogin";
   private static final String LOG_TAG = "dc.RepoDetailsActivity";
 
-  private HttpClient httpClient;
+  private DataRepository dataRepository;
 
   private ImageView ownerImageView;
   private TextView nameTextView;
@@ -61,7 +62,8 @@ public class RepoDetailsFragment extends Fragment {
 
     initView(view);
 
-    httpClient = new HttpClient();
+    dataRepository = App.getDataRepository();
+
     Bundle args = getArguments();
     if (args != null) {
       String repoName = args.getString(EXTRA_REPO_NAME);
@@ -124,7 +126,7 @@ public class RepoDetailsFragment extends Fragment {
       String repoName = params[0];
       String userLogin = params[1];
       try {
-        return httpClient.getRepository(repoName, userLogin);
+        return dataRepository.getRepository(repoName, userLogin);
       } catch (IOException e) {
         e.printStackTrace();
         return null;
