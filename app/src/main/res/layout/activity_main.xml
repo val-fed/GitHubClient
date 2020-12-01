@@ -51,7 +51,6 @@
                 android:id="@+id/search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="searchRepositories"
                 android:padding="8dp"
                 android:src="@drawable/ic_search_white_24"
                 app:layout_constraintBottom_toBottomOf="@+id/query_edit_text"
@@ -62,6 +61,15 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/master_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

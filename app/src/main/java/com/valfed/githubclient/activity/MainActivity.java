@@ -1,101 +1,78 @@
 package com.valfed.githubclient.activity;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.valfed.githubclient.R;
-import com.valfed.githubclient.adapter.RepositoryAdapter;
-import com.valfed.githubclient.entity.Repository;
-import com.valfed.githubclient.network.HttpClient;
+import com.valfed.githubclient.fragment.RepoListFragment;
 
-import java.io.IOException;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
   private static final String LOG_TAG = "dc.MainActivity";
-
-  private HttpClient httpClient;
-  private RepositoryAdapter repositoryAdapter;
-  private EditText queryEditText;
-  private ProgressBar progressBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    initRecyclerView();
-    queryEditText = findViewById(R.id.query_edit_text);
-    progressBar = findViewById(R.id.progress_bar);
+    if (savedInstanceState == null) {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .add(R.id.master_fragment_container, new RepoListFragment(), RepoListFragment.TAG)
+          .commit();
+    }
 
-    httpClient = new HttpClient();
+    initView();
   }
 
-  private void initRecyclerView() {
-    RecyclerView recyclerView = findViewById(R.id.repository_recycler_view);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+  private void initView() {
+    Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-    RepositoryAdapter.OnRepoClickListener listener = new RepositoryAdapter.OnRepoClickListener() {
+    final ImageView searchImageView = findViewById(R.id.search_button);
+    final EditText searchEditText = findViewById(R.id.query_edit_text);
+
+    searchImageView.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onRepoClick(Repository repository) {
-        Intent intent = new Intent(MainActivity.this, RepoDetailsActivity.class);
-        intent.putExtra(RepoDetailsActivity.EXTRA_REPO_NAME, repository.getName());
-        String userLogin = repository.getOwner().getLogin();
-        intent.putExtra(RepoDetailsActivity.EXTRA_USER_LOGIN, userLogin);
-        startActivity(intent);
+      public void onClick(View v) {
+        Fragment fragment = getSupportFragmentManager()
+            .findFragmentById(R.id.master_fragment_container);
+        final RepoListFragment repoListFragment = (RepoListFragment) fragment;
+        if (repoListFragment == null) {
+          throw new NullPointerException("Fragment can not be null");
+        }
+        String query = searchEditText.getText().toString();
+        repoListFragment.onSearchQueryChanged(query);
       }
-    };
-
-    repositoryAdapter = new RepositoryAdapter(listener);
-    recyclerView.setAdapter(repositoryAdapter);
+    });
   }
 
-  public void searchRepositories(View view) {
-    String query = queryEditText.getText().toString();
-    if (query.isEmpty()) {
-      Toast.makeText(this, R.string.empty_text, Toast.LENGTH_SHORT).show();
-    } else {
-      repositoryAdapter.clearItems();
-      new GetRepositoriesTask().execute(query);
-    }
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater menuInflater = getMenuInflater();
+    menuInflater.inflate(R.menu.main_menu, menu);
+    return true;
   }
 
-  private class GetRepositoriesTask extends AsyncTask<String, Void, List<Repository>> {
-
-    @Override
-    protected List<Repository> doInBackground(String... strings) {
-      try {
-        return httpClient.getRepositories(strings[0]);
-      } catch (IOException e) {
-        e.printStackTrace();
-        return null;
-      }
-    }
-
-    @Override
-    protected void onPreExecute() {
-      progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void onPostExecute(List<Repository> result) {
-      progressBar.setVisibility(View.GONE);
-      if (result != null) {
-        repositoryAdapter.addItems(result);
-      } else {
-        Toast
-            .makeText(MainActivity.this, R.string.error_message, Toast.LENGTH_SHORT)
-            .show();
-      }
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.settings:
+        Toast.makeText(this, R.string.settings_clicked_hint, Toast.LENGTH_SHORT).show();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
   }
 }

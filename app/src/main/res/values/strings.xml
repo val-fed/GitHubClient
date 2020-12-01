@@ -8,4 +8,6 @@
     <string name="created_hint">Created:</string>
     <string name="language_hint">Language:</string>
     <string name="settings">Settings</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="settings_clicked_hint">Settings clicked</string>
 </resources>

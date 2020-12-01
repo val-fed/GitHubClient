@@ -8,4 +8,5 @@
     <string name="created_hint">Создан:</string>
     <string name="language_hint">Язык:</string>
     <string name="settings">Настройки</string>
+    <string name="settings_clicked_hint">Нажаты настройки</string>
 </resources>
