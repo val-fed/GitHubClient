@@ -1,4 +1,4 @@
-package com.valfed.githubclient.viewmodel;
+package com.valfed.githubclient;
 
 import com.valfed.githubclient.entity.Owner;
 import com.valfed.githubclient.entity.Repository;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class TestDataProvider {
-  static final Repository REPOSITORY = new Repository(
+  public static final Repository REPOSITORY = new Repository(
       1,
       "name",
       "description",
@@ -20,8 +20,8 @@ public class TestDataProvider {
       new Owner("login", 1, "https://sample/sample.png")
   );
 
-  static final List<Repository> REPOSITORIES = Collections.singletonList(REPOSITORY);
-  static Executor TEST_EXECUTOR = new Executor() {
+  public static final List<Repository> REPOSITORIES = Collections.singletonList(REPOSITORY);
+  public static Executor TEST_EXECUTOR = new Executor() {
     @Override
     public void execute(Runnable command) {
       command.run();

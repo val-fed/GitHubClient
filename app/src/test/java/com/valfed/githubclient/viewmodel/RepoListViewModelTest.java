@@ -14,8 +14,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 
-import static com.valfed.githubclient.viewmodel.TestDataProvider.REPOSITORIES;
-import static com.valfed.githubclient.viewmodel.TestDataProvider.TEST_EXECUTOR;
+import static com.valfed.githubclient.TestDataProvider.REPOSITORIES;
+import static com.valfed.githubclient.TestDataProvider.TEST_EXECUTOR;
 import static org.junit.Assert.assertEquals;
 
 public class RepoListViewModelTest {
