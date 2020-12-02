@@ -8,9 +8,15 @@ import com.valfed.githubclient.network.HttpClient;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class DataRepository {
   private final HttpClient httpClient = App.getHttpClient();
   private final AppDatabase db = App.getAppDatabase();
+
+  @Inject
+  public DataRepository() {
+  }
 
   public Repository getRepository(String repoName, String userLogin) throws IOException {
     Repository repository = db.repositoryDao().getRepository(repoName, userLogin);

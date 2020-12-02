@@ -18,9 +18,12 @@ import com.valfed.githubclient.App;
 import com.valfed.githubclient.R;
 import com.valfed.githubclient.activity.MainActivity;
 import com.valfed.githubclient.adapter.RepositoryAdapter;
+import com.valfed.githubclient.di.ViewModelFactory;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.repository.DataRepository;
 import com.valfed.githubclient.viewmodel.RepoListViewModel;
+
+import javax.inject.Inject;
 
 
 public class RepoListFragment extends Fragment {
@@ -32,6 +35,8 @@ public class RepoListFragment extends Fragment {
   private ProgressBar progressBar;
   private MainActivity mainActivity;
   private RepoListViewModel viewModel;
+  @Inject
+  ViewModelFactory viewModelFactory;
 
   @Override
   public void onAttach(@NonNull Context context) {
@@ -47,6 +52,7 @@ public class RepoListFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_repo_list, container, false);
+    App.getAppComponent().inject(this);
 
     initRecyclerView(view);
     initViewModel();
@@ -57,7 +63,7 @@ public class RepoListFragment extends Fragment {
   }
 
   private void initViewModel() {
-    viewModel = ViewModelProviders.of(this).get(RepoListViewModel.class);
+    viewModel = ViewModelProviders.of(this, viewModelFactory).get(RepoListViewModel.class);
 
     viewModel.getRepositories().observe(this, (repositories -> {
       if (repositories != null) {

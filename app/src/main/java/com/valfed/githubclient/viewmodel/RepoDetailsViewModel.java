@@ -6,18 +6,24 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.valfed.githubclient.App;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.repository.DataRepository;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 public class RepoDetailsViewModel extends ViewModel {
-  private final DataRepository dataRepository = App.getDataRepository();
+  private final DataRepository dataRepository;
 
   private final MutableLiveData<Repository> repository = new MutableLiveData<>();
   private final MutableLiveData<Boolean> isNetworkException = new MutableLiveData<>();
   private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
+  @Inject
+  public RepoDetailsViewModel(DataRepository dataRepository) {
+    this.dataRepository = dataRepository;
+  }
 
   public LiveData<Repository> getRepository() {
     return repository;

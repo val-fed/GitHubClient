@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.squareup.picasso.Picasso;
 import com.valfed.githubclient.App;
 import com.valfed.githubclient.R;
+import com.valfed.githubclient.di.ViewModelFactory;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.repository.DataRepository;
 import com.valfed.githubclient.viewmodel.RepoDetailsViewModel;
@@ -24,6 +25,8 @@ import com.valfed.githubclient.viewmodel.RepoDetailsViewModel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.inject.Inject;
 
 
 public class RepoDetailsFragment extends Fragment {
@@ -44,6 +47,8 @@ public class RepoDetailsFragment extends Fragment {
   private TextView languageTextView;
   private ProgressBar progressBar;
   private RepoDetailsViewModel viewModel;
+  @Inject
+  ViewModelFactory viewModelFactory;
 
 
   public static RepoDetailsFragment newInstance(String repoName, String userLogin) {
@@ -61,7 +66,7 @@ public class RepoDetailsFragment extends Fragment {
                            @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_repo_details, container, false);
-
+    App.getAppComponent().inject(this);
 
     initView(view);
     initViewModel();
@@ -78,7 +83,7 @@ public class RepoDetailsFragment extends Fragment {
   }
 
   private void initViewModel() {
-    viewModel = ViewModelProviders.of(this).get(RepoDetailsViewModel.class);
+    viewModel = ViewModelProviders.of(this, viewModelFactory).get(RepoDetailsViewModel.class);
     viewModel.getRepository().observe(this, (repository -> {
       if (repository != null) {
         display(repository);
