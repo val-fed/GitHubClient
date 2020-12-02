@@ -20,7 +20,6 @@ import com.valfed.githubclient.activity.MainActivity;
 import com.valfed.githubclient.adapter.RepositoryAdapter;
 import com.valfed.githubclient.di.ViewModelFactory;
 import com.valfed.githubclient.entity.Repository;
-import com.valfed.githubclient.repository.DataRepository;
 import com.valfed.githubclient.viewmodel.RepoListViewModel;
 
 import javax.inject.Inject;
@@ -30,7 +29,6 @@ public class RepoListFragment extends Fragment {
 
   public static final String TAG = "RepoListFragment";
 
-  private DataRepository dataRepository;
   private RepositoryAdapter repositoryAdapter;
   private ProgressBar progressBar;
   private MainActivity mainActivity;
@@ -58,7 +56,6 @@ public class RepoListFragment extends Fragment {
     initViewModel();
 
     progressBar = view.findViewById(R.id.progress_bar);
-    dataRepository = App.getDataRepository();
     return view;
   }
 

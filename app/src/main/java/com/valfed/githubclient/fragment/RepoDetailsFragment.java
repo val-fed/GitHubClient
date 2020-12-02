@@ -19,7 +19,6 @@ import com.valfed.githubclient.App;
 import com.valfed.githubclient.R;
 import com.valfed.githubclient.di.ViewModelFactory;
 import com.valfed.githubclient.entity.Repository;
-import com.valfed.githubclient.repository.DataRepository;
 import com.valfed.githubclient.viewmodel.RepoDetailsViewModel;
 
 import java.text.ParseException;
@@ -34,8 +33,6 @@ public class RepoDetailsFragment extends Fragment {
   public static final String EXTRA_REPO_NAME = "repoName";
   public static final String EXTRA_USER_LOGIN = "userLogin";
   private static final String LOG_TAG = "dc.RepoDetailsActivity";
-
-  private DataRepository dataRepository;
 
   private ImageView ownerImageView;
   private TextView nameTextView;
@@ -70,8 +67,6 @@ public class RepoDetailsFragment extends Fragment {
 
     initView(view);
     initViewModel();
-
-    dataRepository = App.getDataRepository();
 
     Bundle args = getArguments();
     if (args != null) {

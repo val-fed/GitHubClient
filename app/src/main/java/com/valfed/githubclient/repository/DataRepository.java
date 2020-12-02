@@ -1,7 +1,6 @@
 package com.valfed.githubclient.repository;
 
-import com.valfed.githubclient.App;
-import com.valfed.githubclient.db.AppDatabase;
+import com.valfed.githubclient.db.RepositoryDao;
 import com.valfed.githubclient.entity.Repository;
 import com.valfed.githubclient.network.HttpClient;
 
@@ -11,15 +10,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class DataRepository {
-  private final HttpClient httpClient = App.getHttpClient();
-  private final AppDatabase db = App.getAppDatabase();
+  private final HttpClient httpClient;
+  private final RepositoryDao repositoryDao;
 
   @Inject
-  public DataRepository() {
+  public DataRepository(HttpClient httpClient, RepositoryDao repositoryDao) {
+    this.httpClient = httpClient;
+    this.repositoryDao = repositoryDao;
   }
 
   public Repository getRepository(String repoName, String userLogin) throws IOException {
-    Repository repository = db.repositoryDao().getRepository(repoName, userLogin);
+    Repository repository = repositoryDao.getRepository(repoName, userLogin);
     if (repository == null) throw new IOException("Can't find repository entity in db");
 
     return repository;
@@ -30,10 +31,10 @@ public class DataRepository {
     try {
 
       repositories = httpClient.getRepositories(query);
-      db.repositoryDao().insertRepositories(repositories);
+      repositoryDao.insertRepositories(repositories);
     } catch (IOException e) {
       String dbWildCardQuery = "%" + query + "%";
-      repositories = db.repositoryDao().getRepositories(dbWildCardQuery);
+      repositories = repositoryDao.getRepositories(dbWildCardQuery);
     }
 
     if (repositories == null)

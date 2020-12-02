@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = ViewModelModule.class)
+@Component(modules = {ViewModelModule.class, AppModule.class})
 public interface AppComponent {
   void inject(RepoListFragment repoListFragment);
 

@@ -7,19 +7,21 @@ import com.valfed.githubclient.entity.Repository;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
+@Singleton
 public class HttpClient {
-  private final Retrofit retrofit = new Retrofit.Builder()
-      .baseUrl(GithubService.BASE_URL)
-      .addConverterFactory(GsonConverterFactory.create())
-      .build();
+  private final GithubService githubService;
 
-  private final GithubService githubService = retrofit.create(GithubService.class);
+  @Inject
+  public HttpClient(GithubService githubService) {
+    this.githubService = githubService;
+  }
 
   public List<Repository> getRepositories(String query) throws IOException {
     RepositoriesResponse response = getResponse(githubService.searchRepos(query));
