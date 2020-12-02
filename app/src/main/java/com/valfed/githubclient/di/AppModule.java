@@ -8,6 +8,9 @@ import com.valfed.githubclient.db.AppDatabase;
 import com.valfed.githubclient.db.RepositoryDao;
 import com.valfed.githubclient.network.GithubService;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -54,5 +57,12 @@ public class AppModule {
   @Singleton
   public GithubService providesGithubService(Retrofit retrofit) {
     return retrofit.create(GithubService.class);
+  }
+
+  @Provides
+  @Singleton
+  Executor providesExecutor() {
+    int cores = Runtime.getRuntime().availableProcessors();
+    return Executors.newFixedThreadPool(cores);
   }
 }

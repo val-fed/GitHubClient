@@ -1,7 +1,5 @@
 package com.valfed.githubclient.viewmodel;
 
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,12 +9,14 @@ import com.valfed.githubclient.repository.DataRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
 public class RepoListViewModel extends ViewModel {
 
   private final DataRepository dataRepository;
+  private final Executor executor;
 
   private final MutableLiveData<List<Repository>> repositories = new MutableLiveData<>();
   private final MutableLiveData<Boolean> isNetworkException = new MutableLiveData<>();
@@ -24,8 +24,9 @@ public class RepoListViewModel extends ViewModel {
   private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
   @Inject
-  public RepoListViewModel(DataRepository dataRepository) {
+  public RepoListViewModel(DataRepository dataRepository, Executor executor) {
     this.dataRepository = dataRepository;
+    this.executor = executor;
   }
 
   public LiveData<List<Repository>> getRepositories() {
@@ -49,37 +50,21 @@ public class RepoListViewModel extends ViewModel {
     if (query.isEmpty()) {
       isQueryValidationException.setValue(true);
     } else {
-      new GetRepositoriesAsyncTask().execute(query);
-    }
-  }
-
-  private class GetRepositoriesAsyncTask extends AsyncTask<String, Void, List<Repository>> {
-
-    @Override
-    protected void onPreExecute() {
       isLoading.setValue(true);
-    }
-
-    @Override
-    protected List<Repository> doInBackground(String... queries) {
-
-      try {
-        return dataRepository.getRepositories(queries[0]);
-      } catch (IOException e) {
-        e.printStackTrace();
-        return null;
-      }
-    }
-
-    @Override
-    protected void onPostExecute(List<Repository> result) {
-      isLoading.setValue(false);
-
-      if (result != null) {
-        repositories.setValue(result);
-      } else {
-        isNetworkException.setValue(true);
-      }
+      executor.execute(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            List<Repository> result = dataRepository.getRepositories(query);
+            repositories.postValue(result);
+          } catch (IOException e) {
+            e.printStackTrace();
+            isNetworkException.postValue(true);
+          } finally {
+            isLoading.postValue(false);
+          }
+        }
+      });
     }
   }
 }
